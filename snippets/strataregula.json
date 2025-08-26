@@ -1,0 +1,77 @@
+{
+    "StrataRegula Service Times Configuration": {
+        "prefix": "sr-service-times",
+        "body": [
+            "service_times:",
+            "  ${1:web}.*.${2:response}: ${3:200}",
+            "  ${4:api}.*.${5:timeout}: ${6:30}",
+            "  ${7:db}.*.${8:query}: ${9:100}"
+        ],
+        "description": "StrataRegula service timing configuration template"
+    },
+    "StrataRegula Resource Limits Configuration": {
+        "prefix": "sr-resource-limits",
+        "body": [
+            "resource_limits:",
+            "  ${1:web}.*.${2:cpu}: ${3:80}",
+            "  ${4:api}.*.${5:memory}: ${6:512}",
+            "  ${7:cache}.*.${8:storage}: ${9:1024}"
+        ],
+        "description": "StrataRegula resource limit configuration template"
+    },
+    "StrataRegula Traffic Routing Configuration": {
+        "prefix": "sr-traffic-routing",
+        "body": [
+            "traffic_routing:",
+            "  ${1:frontend}.*.${2:route}: \"${3:/api/v1}\"",
+            "  ${4:backend}.*.${5:endpoint}: \"${6::8080}\"",
+            "  ${7:gateway}.*.${8:path}: \"${9:/health}\""
+        ],
+        "description": "StrataRegula traffic routing configuration template"
+    },
+    "StrataRegula Wildcard Pattern": {
+        "prefix": "sr-wildcard",
+        "body": [
+            "${1:service}.*.${2:metric}: ${3:value}"
+        ],
+        "description": "StrataRegula wildcard pattern"
+    },
+    "StrataRegula Recursive Wildcard Pattern": {
+        "prefix": "sr-recursive-wildcard",
+        "body": [
+            "${1:service}.**.${2:metric}: ${3:value}"
+        ],
+        "description": "StrataRegula recursive wildcard pattern"
+    },
+    "StrataRegula Complete Configuration": {
+        "prefix": "sr-complete-config",
+        "body": [
+            "# StrataRegula Configuration",
+            "service_times:",
+            "  web.*.response: 200",
+            "  api.*.timeout: 30",
+            "  db.*.query: 100",
+            "",
+            "resource_limits:",
+            "  web.*.cpu: 80",
+            "  api.*.memory: 512",
+            "  cache.*.storage: 1024",
+            "",
+            "traffic_routing:",
+            "  frontend.*.route: \"/api/v1\"",
+            "  backend.*.endpoint: \":8080\"",
+            "  gateway.*.path: \"/health\""
+        ],
+        "description": "Complete StrataRegula configuration template"
+    },
+    "StrataRegula Hierarchical Pattern": {
+        "prefix": "sr-hierarchical",
+        "body": [
+            "${1:region}:",
+            "  ${2:service}.*.${3:metric}:",
+            "    ${4:primary}: ${5:value1}",
+            "    ${6:secondary}: ${7:value2}"
+        ],
+        "description": "StrataRegula hierarchical configuration pattern"
+    }
+}

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StrataRegula Icon Creator</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #1e1e1e; 
+            color: #fff; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        canvas { 
+            border: 2px solid #007ACC; 
+            background: white; 
+            margin: 10px; 
+            cursor: crosshair;
+        }
+        .controls { 
+            margin: 20px 0; 
+            display: flex; 
+            gap: 15px; 
+            flex-wrap: wrap; 
+        }
+        button { 
+            background: #007ACC; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            border-radius: 3px; 
+        }
+        button:hover { 
+            background: #005a9e; 
+        }
+        .icon-preview { 
+            display: flex; 
+            gap: 20px; 
+            margin: 20px 0; 
+        }
+        .preview-size { 
+            text-align: center; 
+        }
+        .color-picker { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 StrataRegula Icon Creator</h1>
+        
+        <div class="controls">
+            <button onclick="drawConcept1()">Concept 1: Hierarchical Dots</button>
+            <button onclick="drawConcept2()">Concept 2: YAML + Wildcard</button>
+            <button onclick="drawConcept3()">Concept 3: Geometric Pattern</button>
+            <button onclick="clearCanvas()">Clear</button>
+            <button onclick="downloadIcon()">Download PNG</button>
+        </div>
+
+        <div class="color-picker">
+            <label>Primary Color:</label>
+            <input type="color" id="primaryColor" value="#007ACC" onchange="updateColors()">
+            <label>Secondary Color:</label>
+            <input type="color" id="secondaryColor" value="#FF6B35" onchange="updateColors()">
+            <label>Background:</label>
+            <input type="color" id="backgroundColor" value="#FFFFFF" onchange="updateColors()">
+        </div>
+
+        <canvas id="iconCanvas" width="128" height="128"></canvas>
+        
+        <div class="icon-preview">
+            <div class="preview-size">
+                <h3>128x128 (Original)</h3>
+                <canvas id="preview128" width="128" height="128"></canvas>
+            </div>
+            <div class="preview-size">
+                <h3>64x64 (Large)</h3>
+                <canvas id="preview64" width="64" height="64"></canvas>
+            </div>
+            <div class="preview-size">
+                <h3>32x32 (Medium)</h3>
+                <canvas id="preview32" width="32" height="32"></canvas>
+            </div>
+            <div class="preview-size">
+                <h3>16x16 (Small)</h3>
+                <canvas id="preview16" width="16" height="16"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let primaryColor = '#007ACC';
+        let secondaryColor = '#FF6B35';
+        let backgroundColor = '#FFFFFF';
+
+        function updateColors() {
+            primaryColor = document.getElementById('primaryColor').value;
+            secondaryColor = document.getElementById('secondaryColor').value;
+            backgroundColor = document.getElementById('backgroundColor').value;
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = backgroundColor;
+            ctx.fillRect(0, 0, 128, 128);
+            updatePreviews();
+        }
+
+        function drawConcept1() {
+            clearCanvas();
+            
+            // Background with subtle gradient
+            const gradient = ctx.createLinearGradient(0, 0, 128, 128);
+            gradient.addColorStop(0, backgroundColor);
+            gradient.addColorStop(1, '#f0f8ff');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 128, 128);
+            
+            // Hierarchical dots pattern
+            ctx.fillStyle = primaryColor;
+            
+            // Level 1: 3 dots
+            const dotSize = 8;
+            const spacing = 16;
+            const startY = 25;
+            
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.arc(44 + i * spacing, startY, dotSize, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Arrow down
+            ctx.fillStyle = secondaryColor;
+            ctx.beginPath();
+            ctx.moveTo(64, 40);
+            ctx.lineTo(60, 50);
+            ctx.lineTo(68, 50);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Level 2: 5 dots
+            ctx.fillStyle = primaryColor;
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(36 + i * spacing, startY + 35, dotSize, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Arrow down
+            ctx.fillStyle = secondaryColor;
+            ctx.beginPath();
+            ctx.moveTo(64, 75);
+            ctx.lineTo(60, 85);
+            ctx.lineTo(68, 85);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Level 3: 7 dots
+            ctx.fillStyle = primaryColor;
+            for (let i = 0; i < 7; i++) {
+                ctx.beginPath();
+                ctx.arc(28 + i * spacing, startY + 70, dotSize, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            updatePreviews();
+        }
+
+        function drawConcept2() {
+            clearCanvas();
+            
+            // Background
+            const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+            gradient.addColorStop(0, backgroundColor);
+            gradient.addColorStop(1, '#e8f4f8');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 128, 128);
+            
+            // YAML document background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(20, 25, 88, 78);
+            ctx.strokeStyle = primaryColor;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(20, 25, 88, 78);
+            
+            // YAML content
+            ctx.fillStyle = '#333333';
+            ctx.font = '10px monospace';
+            ctx.fillText('service_times:', 25, 40);
+            
+            // Wildcard patterns with highlighting
+            ctx.fillStyle = secondaryColor;
+            ctx.font = 'bold 12px monospace';
+            ctx.fillText('web.*', 30, 55);
+            ctx.fillText('api.*', 30, 70);
+            ctx.fillText('db.*', 30, 85);
+            
+            // Expansion arrow
+            ctx.fillStyle = primaryColor;
+            ctx.beginPath();
+            ctx.moveTo(85, 60);
+            ctx.lineTo(100, 60);
+            ctx.lineTo(95, 55);
+            ctx.moveTo(100, 60);
+            ctx.lineTo(95, 65);
+            ctx.stroke();
+            
+            updatePreviews();
+        }
+
+        function drawConcept3() {
+            clearCanvas();
+            
+            // Background with subtle pattern
+            ctx.fillStyle = backgroundColor;
+            ctx.fillRect(0, 0, 128, 128);
+            
+            const centerX = 64;
+            const centerY = 64;
+            const size = 45;
+            
+            // Outer hexagon
+            ctx.strokeStyle = primaryColor;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (i * Math.PI) / 3;
+                const x = centerX + size * Math.cos(angle);
+                const y = centerY + size * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+            
+            // Inner pattern - layers
+            for (let layer = 0; layer < 3; layer++) {
+                const layerSize = size - (layer * 12);
+                const alpha = 1 - (layer * 0.3);
+                
+                ctx.fillStyle = primaryColor + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i * Math.PI) / 3;
+                    const x = centerX + layerSize * Math.cos(angle);
+                    const y = centerY + layerSize * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Central wildcard symbol
+            ctx.fillStyle = backgroundColor;
+            ctx.font = 'bold 24px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('*', centerX, centerY);
+            
+            updatePreviews();
+        }
+
+        function updatePreviews() {
+            const sizes = [128, 64, 32, 16];
+            sizes.forEach(size => {
+                const previewCanvas = document.getElementById(`preview${size}`);
+                const previewCtx = previewCanvas.getContext('2d');
+                previewCtx.drawImage(canvas, 0, 0, size, size);
+            });
+        }
+
+        function downloadIcon() {
+            const link = document.createElement('a');
+            link.download = 'strataregula-icon-128x128.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Initialize with concept 1
+        drawConcept1();
+    </script>
+</body>
+</html>

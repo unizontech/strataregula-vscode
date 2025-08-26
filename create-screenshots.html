@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StrataRegula VS Code Screenshots</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: #1e1e1e; 
+            color: #fff; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        .screenshot { 
+            background: #252526; 
+            border: 1px solid #3c3c3c; 
+            margin: 20px 0; 
+            border-radius: 6px; 
+            overflow: hidden; 
+        }
+        .title-bar { 
+            background: #2d2d30; 
+            padding: 10px 20px; 
+            border-bottom: 1px solid #3c3c3c; 
+            font-size: 12px; 
+        }
+        .editor { 
+            padding: 20px; 
+            font-family: 'Consolas', 'Monaco', monospace; 
+            font-size: 14px; 
+            line-height: 1.5; 
+        }
+        .yaml-key { color: #4FC1FF; }
+        .yaml-string { color: #CE9178; }
+        .yaml-number { color: #B5CEA8; }
+        .wildcard { color: #FF6B35; font-weight: bold; }
+        .comment { color: #6A9955; font-style: italic; }
+        .gutter { 
+            color: #858585; 
+            width: 40px; 
+            display: inline-block; 
+            text-align: right; 
+            margin-right: 20px; 
+        }
+        .completion-popup { 
+            background: #252526; 
+            border: 1px solid #454545; 
+            border-radius: 3px; 
+            margin: 10px 0; 
+            padding: 0; 
+        }
+        .completion-item { 
+            padding: 8px 12px; 
+            border-bottom: 1px solid #3c3c3c; 
+            cursor: pointer; 
+        }
+        .completion-item:hover { 
+            background: #094771; 
+        }
+        .completion-item:last-child { 
+            border-bottom: none; 
+        }
+        .suggestion-icon { 
+            color: #CCCCCC; 
+            margin-right: 8px; 
+        }
+        .command-palette { 
+            background: #252526; 
+            border: 1px solid #454545; 
+            border-radius: 3px; 
+            padding: 10px; 
+            margin: 10px 0; 
+        }
+        .command-item { 
+            padding: 5px 10px; 
+            margin: 2px 0; 
+            border-radius: 3px; 
+        }
+        .command-item:hover { 
+            background: #094771; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📸 StrataRegula VS Code Extension Screenshots</h1>
+        
+        <!-- Screenshot 1: Syntax Highlighting -->
+        <div class="screenshot">
+            <div class="title-bar">📁 config.yaml - StrataRegula Configuration</div>
+            <div class="editor">
+<span class="gutter">1</span><span class="comment"># StrataRegula Configuration Example</span><br>
+<span class="gutter">2</span><span class="yaml-key">service_times</span>:<br>
+<span class="gutter">3</span>  <span class="yaml-key">web</span><span class="wildcard">.*</span><span class="yaml-key">response</span>: <span class="yaml-number">200</span><br>
+<span class="gutter">4</span>  <span class="yaml-key">api</span><span class="wildcard">.*</span><span class="yaml-key">timeout</span>: <span class="yaml-number">30</span><br>
+<span class="gutter">5</span>  <span class="yaml-key">db</span><span class="wildcard">.**</span><span class="yaml-key">query</span>: <span class="yaml-number">100</span><br>
+<span class="gutter">6</span><br>
+<span class="gutter">7</span><span class="yaml-key">resource_limits</span>:<br>
+<span class="gutter">8</span>  <span class="yaml-key">web</span><span class="wildcard">.*</span><span class="yaml-key">cpu</span>: <span class="yaml-number">80</span><br>
+<span class="gutter">9</span>  <span class="yaml-key">api</span><span class="wildcard">.*</span><span class="yaml-key">memory</span>: <span class="yaml-number">512</span><br>
+<span class="gutter">10</span>  <span class="yaml-key">cache</span><span class="wildcard">.*</span><span class="yaml-key">storage</span>: <span class="yaml-number">1024</span>
+            </div>
+        </div>
+
+        <!-- Screenshot 2: IntelliSense -->
+        <div class="screenshot">
+            <div class="title-bar">💡 IntelliSense - Pattern Completion</div>
+            <div class="editor">
+<span class="gutter">1</span><span class="yaml-key">service_times</span>:<br>
+<span class="gutter">2</span>  sr-|<span style="color: #007ACC;">█</span>
+                <div class="completion-popup">
+                    <div class="completion-item">
+                        <span class="suggestion-icon">📝</span>sr-service-times
+                        <div style="font-size: 11px; color: #CCCCCC; margin-top: 2px;">StrataRegula service timing configuration</div>
+                    </div>
+                    <div class="completion-item">
+                        <span class="suggestion-icon">📝</span>sr-resource-limits
+                        <div style="font-size: 11px; color: #CCCCCC; margin-top: 2px;">StrataRegula resource limit configuration</div>
+                    </div>
+                    <div class="completion-item">
+                        <span class="suggestion-icon">📝</span>sr-traffic-routing
+                        <div style="font-size: 11px; color: #CCCCCC; margin-top: 2px;">StrataRegula traffic routing configuration</div>
+                    </div>
+                    <div class="completion-item">
+                        <span class="suggestion-icon">📝</span>sr-wildcard
+                        <div style="font-size: 11px; color: #CCCCCC; margin-top: 2px;">StrataRegula wildcard pattern</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshot 3: Command Palette -->
+        <div class="screenshot">
+            <div class="title-bar">⚡ Command Palette - StrataRegula Commands</div>
+            <div class="editor">
+                <div style="text-align: center; padding: 10px; background: #37373d; border-bottom: 1px solid #454545;">
+                    <span style="color: #CCCCCC;">&gt; StrataRegula</span><span style="color: #007ACC;">█</span>
+                </div>
+                <div class="command-palette">
+                    <div class="command-item" style="background: #094771;">
+                        <strong>StrataRegula: Compile Configuration</strong>
+                        <div style="font-size: 11px; color: #CCCCCC;">Compile YAML configuration using StrataRegula</div>
+                    </div>
+                    <div class="command-item">
+                        <strong>StrataRegula: Preview Compiled Output</strong>
+                        <div style="font-size: 11px; color: #CCCCCC;">Show tree-formatted compilation preview</div>
+                    </div>
+                    <div class="command-item">
+                        <strong>StrataRegula: Check Environment</strong>
+                        <div style="font-size: 11px; color: #CCCCCC;">Run StrataRegula environment diagnostics</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshot 4: Compiled Output Preview -->
+        <div class="screenshot">
+            <div class="title-bar">🌳 Compiled Output Preview - Tree Format</div>
+            <div class="editor">
+<span style="color: #6A9955;"># StrataRegula Compilation Result</span><br><br>
+<span style="color: #4FC1FF;">Configuration Tree:</span><br>
+<span style="color: #CCCCCC;">services/</span><br>
+<span style="color: #CCCCCC;">├── web/</span><br>
+<span style="color: #CCCCCC;">│   ├── frontend</span><span style="color: #wildcard;">.response</span>: <span style="color: #B5CEA8;">200ms</span><br>
+<span style="color: #CCCCCC;">│   └── backend</span><span style="color: #wildcard;">.response</span>: <span style="color: #B5CEA8;">200ms</span><br>
+<span style="color: #CCCCCC;">├── api/</span><br>
+<span style="color: #CCCCCC;">│   ├── v1</span><span style="color: #wildcard;">.timeout</span>: <span style="color: #B5CEA8;">30s</span><br>
+<span style="color: #CCCCCC;">│   └── v2</span><span style="color: #wildcard;">.timeout</span>: <span style="color: #B5CEA8;">30s</span><br>
+<span style="color: #CCCCCC;">└── db/</span><br>
+<span style="color: #CCCCCC;">    ├── primary</span><span style="color: #wildcard;">.query</span>: <span style="color: #B5CEA8;">100ms</span><br>
+<span style="color: #CCCCCC;">    └── replica</span><span style="color: #wildcard;">.query</span>: <span style="color: #B5CEA8;">100ms</span><br>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 40px 0; color: #858585;">
+            <p>🎯 <strong>StrataRegula VS Code Extension</strong></p>
+            <p>Enhanced YAML configuration pattern editing with intelligent IntelliSense</p>
+        </div>
+
+        <button onclick="captureScreenshots()" style="background: #007ACC; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 16px; display: block; margin: 0 auto;">
+            📸 Generate Screenshot Files
+        </button>
+    </div>
+
+    <script>
+        function captureScreenshots() {
+            alert('Screenshots are ready for manual capture!\n\n1. Use browser screenshot tool\n2. Capture each section individually\n3. Save as PNG files for VS Code marketplace\n\nRecommended sizes:\n- Hero image: 1200x600px\n- Feature screenshots: 800x500px');
+        }
+    </script>
+</body>
+</html>
