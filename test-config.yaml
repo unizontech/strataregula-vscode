@@ -1,3 +1,9 @@
+# StrataRegula Test Configuration
+# Test intelligent completion by typing patterns like:
+# - prod. (environment completion)
+# - web. (service completion) 
+# - database: (config type completion)
+
 service_times:
   prod.frontend.response: 200
   prod.backend.timeout: 30
@@ -11,11 +17,21 @@ traffic_routing:
   frontend.*.route: "/api/v1"
   backend.*.endpoint: ":8080"
 
+# Test completion here - try typing "prod." or "web." or "database:"
+test_completions:
+  # Type patterns here to test LSP completions
+
 environments:
   production:
-    db_host: "prod-db.example.com"
-    cache_host: "prod-cache.example.com"
+    database:
+      host: "prod-db.example.com"
+      port: 5432
+    cache:
+      host: "prod-cache.example.com"
   
   development:
-    db_host: "dev-db.example.com"
-    cache_host: "dev-cache.example.com"
+    database:
+      host: "dev-db.example.com"
+      port: 5432
+    cache:
+      host: "dev-cache.example.com"
