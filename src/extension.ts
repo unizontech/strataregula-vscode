@@ -2,11 +2,21 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import {
+    LanguageClient,
+    LanguageClientOptions,
+    ServerOptions,
+    TransportKind
+} from 'vscode-languageclient/node';
 
 const execAsync = promisify(exec);
+let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('StrataRegula extension is now active!');
+
+    // Start the Language Server
+    startLanguageServer(context);
 
     // Register StrataRegula compile command
     let compileCommand = vscode.commands.registerCommand('strataregula.compile', async (uri?: vscode.Uri) => {
@@ -44,82 +54,58 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(compileCommand, previewCommand, doctorCommand);
+}
 
-    // Register completion provider for StrataRegula patterns
-    const completionProvider = vscode.languages.registerCompletionItemProvider(
-        { scheme: 'file', language: 'yaml' },
-        new StrataRegulaCompletionProvider(),
-        '.', '*'
+function startLanguageServer(context: vscode.ExtensionContext) {
+    // Path to the LSP server launcher script
+    const serverScript = path.join(context.extensionPath, 'server', 'lsp_server.py');
+    
+    // LSP server options - using Python launcher script
+    const serverOptions: ServerOptions = {
+        command: 'python',
+        args: [serverScript],
+        options: {
+            cwd: context.extensionPath
+        }
+    };
+
+    // Language client options
+    const clientOptions: LanguageClientOptions = {
+        // Register the server for YAML files
+        documentSelector: [
+            { scheme: 'file', language: 'yaml' },
+            { scheme: 'file', language: 'yml' },
+            { scheme: 'file', language: 'strataregula-yaml' }
+        ],
+        synchronize: {
+            // Notify the server about file changes to YAML files
+            fileEvents: vscode.workspace.createFileSystemWatcher('**/*.{yaml,yml}')
+        },
+        // Output channel for LSP communication debugging
+        outputChannelName: 'StrataRegula Language Server',
+        // Enable tracing for debugging
+        traceOutputChannel: vscode.window.createOutputChannel('StrataRegula LSP Trace')
+    };
+
+    // Create and start the language client
+    client = new LanguageClient(
+        'strataregula-lsp',
+        'StrataRegula Language Server',
+        serverOptions,
+        clientOptions
     );
 
-    context.subscriptions.push(completionProvider);
+    // Start the client (this will start the server)
+    client.start().then(() => {
+        console.log('StrataRegula Language Server started successfully');
+        vscode.window.showInformationMessage('StrataRegula Language Server is ready!');
+    }).catch((error) => {
+        console.error('Failed to start StrataRegula Language Server:', error);
+        vscode.window.showErrorMessage(`Failed to start StrataRegula Language Server: ${error.message}`);
+    });
 }
 
-class StrataRegulaCompletionProvider implements vscode.CompletionItemProvider {
-    provideCompletionItems(
-        document: vscode.TextDocument,
-        position: vscode.Position
-    ): vscode.CompletionItem[] {
-        const linePrefix = document.lineAt(position).text.substr(0, position.character);
-        
-        // Check if we're in a context where StrataRegula patterns make sense
-        if (!this.isStrataRegulaContext(document, position)) {
-            return [];
-        }
-
-        const completions: vscode.CompletionItem[] = [];
-
-        // Wildcard pattern completions
-        if (linePrefix.includes(':')) {
-            const wildcardCompletion = new vscode.CompletionItem('*.', vscode.CompletionItemKind.Snippet);
-            wildcardCompletion.detail = 'StrataRegula wildcard pattern';
-            wildcardCompletion.documentation = 'Single-level wildcard pattern for StrataRegula';
-            wildcardCompletion.insertText = new vscode.SnippetString('*.');
-            completions.push(wildcardCompletion);
-
-            const recursiveWildcardCompletion = new vscode.CompletionItem('**.', vscode.CompletionItemKind.Snippet);
-            recursiveWildcardCompletion.detail = 'StrataRegula recursive wildcard pattern';
-            recursiveWildcardCompletion.documentation = 'Multi-level recursive wildcard pattern for StrataRegula';
-            recursiveWildcardCompletion.insertText = new vscode.SnippetString('**.');
-            completions.push(recursiveWildcardCompletion);
-        }
-
-        // Common StrataRegula configuration patterns
-        const commonPatterns = [
-            {
-                label: 'service_times',
-                detail: 'StrataRegula service timing configuration',
-                snippet: 'service_times:\n  ${1:web}.*.${2:response}: ${3:200}\n  ${4:api}.*.${5:timeout}: ${6:30}'
-            },
-            {
-                label: 'resource_limits',
-                detail: 'StrataRegula resource limit configuration',
-                snippet: 'resource_limits:\n  ${1:web}.*.${2:cpu}: ${3:80}\n  ${4:api}.*.${5:memory}: ${6:512}'
-            },
-            {
-                label: 'traffic_routing',
-                detail: 'StrataRegula traffic routing configuration',
-                snippet: 'traffic_routing:\n  ${1:frontend}.*.${2:route}: ${3:"/api/v1"}\n  ${4:backend}.*.${5:endpoint}: ${6:":8080"}'
-            }
-        ];
-
-        for (const pattern of commonPatterns) {
-            const completion = new vscode.CompletionItem(pattern.label, vscode.CompletionItemKind.Snippet);
-            completion.detail = pattern.detail;
-            completion.insertText = new vscode.SnippetString(pattern.snippet);
-            completions.push(completion);
-        }
-
-        return completions;
-    }
-
-    private isStrataRegulaContext(document: vscode.TextDocument, position: vscode.Position): boolean {
-        // Simple heuristic: check if document contains StrataRegula-style patterns
-        const content = document.getText();
-        return content.includes('*') || content.includes('service_times') || 
-               content.includes('resource_limits') || content.includes('traffic');
-    }
-}
+// LSP provides completion functionality, no need for custom completion provider
 
 async function compileStrataRegula(filePath: string) {
     try {
@@ -199,6 +185,12 @@ async function runStrataRegulaDoctor() {
     }
 }
 
-export function deactivate() {
+export function deactivate(): Thenable<void> | undefined {
     console.log('StrataRegula extension deactivated');
+    
+    // Stop the language client
+    if (client) {
+        return client.stop();
+    }
+    return undefined;
 }
