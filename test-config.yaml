@@ -1,0 +1,21 @@
+service_times:
+  prod.frontend.response: 200
+  prod.backend.timeout: 30
+  dev.api.retry: 3
+
+resource_limits:
+  web.*.cpu: 80
+  api.*.memory: 512
+
+traffic_routing:
+  frontend.*.route: "/api/v1"
+  backend.*.endpoint: ":8080"
+
+environments:
+  production:
+    db_host: "prod-db.example.com"
+    cache_host: "prod-cache.example.com"
+  
+  development:
+    db_host: "dev-db.example.com"
+    cache_host: "dev-cache.example.com"
