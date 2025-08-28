@@ -15,5 +15,5 @@ tsconfig.json
 *.vsix
 .vscode-test/**
 src/**
-server/lsp_server.py
+# server/lsp_server.py  # Keep server files in package
 test-config.yaml

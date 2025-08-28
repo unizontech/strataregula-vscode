@@ -15,7 +15,9 @@ def main():
     lsp_paths = [
         # Same parent directory as extension (development)
         current_dir.parent.parent / "strataregula-lsp",
-        # User's project directory
+        # User's project directory - correct Windows path
+        Path(r"C:\Users\uraka\project\strataregula-lsp"),
+        # Alternative user project path
         Path.home() / "project" / "strataregula-lsp",
         # Global installation path
         Path("/usr/local/lib/strataregula-lsp"),

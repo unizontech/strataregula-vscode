@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2025-08-28
+
+### Fixed
+- Fixed missing server directory in extension package
+- Corrected .vscodeignore to include LSP server files
+- Resolved "Server initialization failed" error
+
+### Changed  
+- Updated extension packaging to include all required server components
+
 ## [0.1.1] - 2025-08-28
 
 ### Changed
