@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2025-08-28
+
+### Changed
+- Updated extension name from "strataregula-lsp" to "StrataRegula" 
+- Improved package configuration for VS Code Marketplace publishing
+- Enhanced authentication workflow for marketplace publication
+
 ## [0.1.0] - 2025-08-28
 
 ### Added
