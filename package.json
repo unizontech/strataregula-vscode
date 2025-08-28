@@ -1,7 +1,7 @@
 {
-  "name": "strataregula-lsp",
-  "displayName": "StrataRegula LSP",
-  "publisher": "unizontech",
+  "name": "StrataRegula",
+  "displayName": "StrataRegula",
+  "publisher": "Unizontechcoltd",
   "description": "動的設定ファイルの学習型インテリセンス（YAML補完/LSP）",
   "version": "0.1.0",
   "icon": "assets/icon.png",
