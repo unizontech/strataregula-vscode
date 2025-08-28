@@ -52,7 +52,17 @@ function activate(context) {
             startLanguageServer(context);
         }
     });
-    context.subscriptions.push(compileCommand, previewCommand, doctorCommand, restartCommand);
+    // Register maintenance commands
+    let reindexCommand = vscode.commands.registerCommand('strataregula.reindex', async () => {
+        await runStrataRegulaReindex();
+    });
+    let resetCacheCommand = vscode.commands.registerCommand('strataregula.resetCache', async () => {
+        await runStrataRegulaResetCache();
+    });
+    let showStatsCommand = vscode.commands.registerCommand('strataregula.showStats', async () => {
+        await runStrataRegulaShowStats();
+    });
+    context.subscriptions.push(compileCommand, previewCommand, doctorCommand, restartCommand, reindexCommand, resetCacheCommand, showStatsCommand);
 }
 function startLanguageServer(context) {
     // Path to the LSP server launcher script
@@ -162,6 +172,78 @@ async function runStrataRegulaDoctor() {
     }
     catch (error) {
         vscode.window.showErrorMessage(`StrataRegula doctor failed: ${error}`);
+    }
+}
+async function runStrataRegulaReindex() {
+    try {
+        vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: "Reindexing StrataRegula configurations...",
+            cancellable: false
+        }, async () => {
+            const command = `strataregula index --rebuild --force`;
+            const { stdout, stderr } = await execAsync(command);
+            if (stderr) {
+                vscode.window.showErrorMessage(`StrataRegula reindex error: ${stderr}`);
+            }
+            else {
+                vscode.window.showInformationMessage('StrataRegula reindex completed successfully!');
+                // Restart LSP to pick up new index
+                if (client) {
+                    await client.stop();
+                    startLanguageServer(vscode.extensions.getExtension('Unizontechcoltd.StrataRegula')?.extensionPath ? { extensionPath: vscode.extensions.getExtension('Unizontechcoltd.StrataRegula').extensionPath } : {});
+                }
+            }
+        });
+    }
+    catch (error) {
+        vscode.window.showErrorMessage(`StrataRegula reindex failed: ${error}`);
+    }
+}
+async function runStrataRegulaResetCache() {
+    try {
+        vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: "Resetting StrataRegula cache...",
+            cancellable: false
+        }, async () => {
+            const command = `strataregula cache --clear --all`;
+            const { stdout, stderr } = await execAsync(command);
+            if (stderr) {
+                vscode.window.showErrorMessage(`StrataRegula cache reset error: ${stderr}`);
+            }
+            else {
+                vscode.window.showInformationMessage('StrataRegula cache reset successfully!');
+                // Restart LSP to start with fresh cache
+                if (client) {
+                    await client.stop();
+                    startLanguageServer(vscode.extensions.getExtension('Unizontechcoltd.StrataRegula')?.extensionPath ? { extensionPath: vscode.extensions.getExtension('Unizontechcoltd.StrataRegula').extensionPath } : {});
+                }
+            }
+        });
+    }
+    catch (error) {
+        vscode.window.showErrorMessage(`StrataRegula cache reset failed: ${error}`);
+    }
+}
+async function runStrataRegulaShowStats() {
+    try {
+        const command = `strataregula stats --format json --include-patterns`;
+        const { stdout, stderr } = await execAsync(command);
+        if (stderr) {
+            vscode.window.showErrorMessage(`StrataRegula stats error: ${stderr}`);
+        }
+        else {
+            // Show stats in a new editor
+            const statsDoc = await vscode.workspace.openTextDocument({
+                content: stdout,
+                language: 'json'
+            });
+            await vscode.window.showTextDocument(statsDoc, vscode.ViewColumn.Beside);
+        }
+    }
+    catch (error) {
+        vscode.window.showErrorMessage(`StrataRegula stats failed: ${error}`);
     }
 }
 function deactivate() {

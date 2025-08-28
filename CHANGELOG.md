@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2025-08-28
+
+### Added
+- インデックス設定オプション（include/exclude/persist/watch）
+- メンテナンスコマンド（Reindex/Reset Cache/Show Stats）
+- 快適運用のための設定ガイド
+
+### Enhanced  
+- パフォーマンス最適化のための設定項目
+- 差分監視とキャッシュ機能の制御
+- ユーザー向け設定例とベストプラクティス
+
 ## [0.1.3] - 2025-08-28
 
 ### Changed

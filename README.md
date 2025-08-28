@@ -42,12 +42,49 @@ environments:
 
 ## 📋 コマンド
 
-- `StrataRegula: Restart Language Server` - LSPサーバー再起動
+### 基本コマンド
+- `StrataRegula: Compile Configuration` - YAML設定をコンパイル
+- `StrataRegula: Preview Compiled Output` - コンパイル結果をプレビュー  
+- `StrataRegula: Check Environment` - 環境チェック
+- `StrataRegula: Restart Server` - サーバー再起動
+
+### メンテナンスコマンド
+- `StrataRegula: Reindex` - 全再学習
+- `StrataRegula: Reset/Flush Cache` - キャッシュ破棄
+- `StrataRegula: Show Index Stats` - 学習状況確認
 
 ## ⚙️ 設定
 
+### 基本設定
 - `strataregulaLsp.maxSuggestions` (既定: 6) - 補完候補の最大数
 - `strataregulaLsp.telemetry` (既定: false) - 匿名テレメトリ
+
+### インデックス設定（快適運用）
+- `strataregula.index.include` - 学習対象パターン
+- `strataregula.index.exclude` - 除外パターン  
+- `strataregula.index.persist` (既定: true) - キャッシュ復元
+- `strataregula.index.watch` (既定: true) - 差分監視
+
+### おすすめ設定例（`.vscode/settings.json`）
+```json
+{
+  "strataregula.index.include": [
+    "config/**/*.y?(a)ml",
+    "apps/*/config/**/*.y?(a)ml", 
+    "services/*/config/**/*.y?(a)ml",
+    ".config/strata/**/*.y?(a)ml",
+    "**/*.yml",
+    "**/*.yaml"
+  ],
+  "strataregula.index.exclude": [
+    "**/*/*/*/*/*/*/**",
+    "**/node_modules/**", "**/.git/**", "**/.venv/**",
+    "**/dist/**", "**/build/**", "**/coverage/**"
+  ],
+  "strataregula.index.persist": true,
+  "strataregula.index.watch": true
+}
+```
 
 ## 🔒 プライバシー
 
