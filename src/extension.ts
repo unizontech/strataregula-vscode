@@ -56,11 +56,11 @@ export function activate(context: vscode.ExtensionContext) {
     // Register LSP restart command
     let restartCommand = vscode.commands.registerCommand('strataregulaLsp.restartServer', async () => {
         if (client) {
-            vscode.window.showInformationMessage('Restarting StrataRegula Language Server...');
+            vscode.window.showInformationMessage('Restarting StrataRegula...');
             await client.stop();
             startLanguageServer(context);
         } else {
-            vscode.window.showInformationMessage('Starting StrataRegula Language Server...');
+            vscode.window.showInformationMessage('Starting StrataRegula...');
             startLanguageServer(context);
         }
     });
@@ -110,10 +110,10 @@ function startLanguageServer(context: vscode.ExtensionContext) {
     // Start the client (this will start the server)
     client.start().then(() => {
         console.log('StrataRegula Language Server started successfully');
-        vscode.window.showInformationMessage('StrataRegula Language Server is ready!');
+        vscode.window.showInformationMessage('StrataRegula is ready!');
     }).catch((error) => {
         console.error('Failed to start StrataRegula Language Server:', error);
-        vscode.window.showErrorMessage(`Failed to start StrataRegula Language Server: ${error.message}`);
+        vscode.window.showErrorMessage(`Failed to start StrataRegula: ${error.message}`);
     });
 }
 

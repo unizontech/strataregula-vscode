@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2025-08-28
+
+### Changed
+- Removed "Language Server" / "LSP" text from user-facing messages
+- Simplified messages to just "StrataRegula is ready!"
+- Cleaner UI text without technical terminology
+
 ## [0.1.2] - 2025-08-28
 
 ### Fixed

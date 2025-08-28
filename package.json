@@ -2,8 +2,8 @@
   "name": "StrataRegula",
   "displayName": "StrataRegula",
   "publisher": "Unizontechcoltd",
-  "description": "動的設定ファイルの学習型インテリセンス（YAML補完/LSP）",
-  "version": "0.1.2",
+  "description": "動的設定ファイルの学習型インテリセンス（YAML補完）",
+  "version": "0.1.3",
   "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.90.0"
@@ -53,7 +53,7 @@
     "commands": [
       {
         "command": "strataregulaLsp.restartServer",
-        "title": "StrataRegula: Restart Language Server",
+        "title": "StrataRegula: Restart Server",
         "category": "StrataRegula"
       },
       {
