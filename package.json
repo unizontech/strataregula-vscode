@@ -1,34 +1,45 @@
 {
-  "name": "strataregula-vscode",
-  "displayName": "StrataRegula",
-  "description": "YAML Configuration Pattern Compiler support for VS Code",
+  "name": "strataregula-lsp",
+  "displayName": "StrataRegula LSP",
+  "publisher": "unizontech",
+  "description": "動的設定ファイルの学習型インテリセンス（YAML補完/LSP）",
   "version": "0.1.0",
-  "icon": "images/icon.png",
+  "icon": "assets/icon.png",
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
-    "Other",
-    "Snippets",
-    "Language Packs"
+    "Programming Languages",
+    "Linters",
+    "Snippets"
   ],
   "keywords": [
-    "yaml",
-    "configuration",
-    "pattern",
-    "strataregula",
-    "infrastructure"
+    "YAML",
+    "LSP",
+    "IntelliSense",
+    "Config",
+    "StrataRegula",
+    "Pattern Compiler",
+    "Completion"
   ],
   "activationEvents": [
-    "onLanguage:yaml"
+    "onLanguage:yaml",
+    "workspaceContains:**/*.yaml",
+    "onCommand:strataregulaLsp.restartServer"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "languages": [
       {
         "id": "strataregula-yaml",
-        "aliases": ["StrataRegula YAML", "strataregula"],
-        "extensions": [".yaml", ".yml"],
+        "aliases": [
+          "StrataRegula YAML",
+          "strataregula"
+        ],
+        "extensions": [
+          ".yaml",
+          ".yml"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
@@ -40,6 +51,11 @@
       }
     ],
     "commands": [
+      {
+        "command": "strataregulaLsp.restartServer",
+        "title": "StrataRegula: Restart Language Server",
+        "category": "StrataRegula"
+      },
       {
         "command": "strataregula.compile",
         "title": "Compile Configuration",
@@ -56,6 +72,23 @@
         "category": "StrataRegula"
       }
     ],
+    "configuration": {
+      "title": "StrataRegula LSP",
+      "properties": {
+        "strataregulaLsp.telemetry": {
+          "type": "boolean",
+          "default": false,
+          "description": "匿名テレメトリ（デフォルトOFF）"
+        },
+        "strataregulaLsp.maxSuggestions": {
+          "type": "number",
+          "default": 6,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "補完候補の最大数"
+        }
+      }
+    },
     "menus": {
       "explorer/context": [
         {
@@ -73,26 +106,31 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run build",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "build": "npm run compile",
+    "watch": "tsc -watch -p ./",
+    "lint": "echo 'eslint .'",
+    "package": "vsce package",
+    "publish": "vsce publish"
   },
   "dependencies": {
-    "vscode-languageclient": "^8.1.0"
+    "vscode-languageclient": "^9.0.0"
   },
   "devDependencies": {
-    "@types/vscode": "^1.74.0",
-    "@types/node": "16.x",
-    "typescript": "^4.9.4"
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^3.6.0",
+    "typescript": "^5.5.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/strataregula/strataregula-vscode"
+    "url": "https://github.com/unizontech/strataregula-vscode.git"
   },
   "bugs": {
-    "url": "https://github.com/strataregula/strataregula-vscode/issues"
+    "url": "https://github.com/unizontech/strataregula-vscode/issues"
   },
-  "homepage": "https://github.com/strataregula/strataregula-vscode#readme",
-  "author": "StrataRegula Team",
-  "license": "MIT"
+  "homepage": "https://github.com/unizontech/strataregula-vscode#readme",
+  "author": "unizontech",
+  "license": "Apache-2.0"
 }

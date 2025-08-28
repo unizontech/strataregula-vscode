@@ -1,200 +1,88 @@
-# StrataRegula VS Code Extension
+# StrataRegula LSP
 
-Enhanced VS Code support for StrataRegula YAML Configuration Pattern Compiler.
+動的設定ファイルの学習型インテリセンス。YAMLを解析し、**頻度/階層ベース**で補完候補を提案します。
 
-## Features
+## ✨ 主な機能
 
-### 🎯 **Intelligent YAML Support**
-- **Syntax Highlighting**: Special highlighting for StrataRegula wildcard patterns (`*`, `**`)
-- **IntelliSense**: Auto-completion for common configuration patterns
-- **Snippets**: Pre-built templates for service times, resource limits, and traffic routing
+### 🧠 学習型インテリセンス
+- プロジェクトのYAMLファイルを解析して使用パターンを学習
+- 頻度ベースで最適な補完候補を提案
+- 階層的補完：深度に応じた候補（環境/サービス/設定タイプ）
 
-### ⚡ **Integrated Commands**
-- **Compile Configuration**: Right-click any YAML file to compile with StrataRegula
-- **Preview Output**: See compiled results in tree format
-- **Environment Check**: Run `strataregula doctor` from within VS Code
+### ⚡ 高速補完
+- `prod.` → 環境名の補完
+- `web.` → サービス名の補完  
+- `database.` → 設定タイプの補完
+- フォールバック：学習データなしでも基本補完を提供
 
-### 🛠️ **Smart Patterns**
+### 🔧 Language Server Protocol (LSP)
+- 標準LSPによる高性能な解析エンジン
+- リアルタイムパターン認識
+- VS Code以外のエディタにも将来対応予定
 
-**Wildcard Pattern Recognition:**
+## 🚀 使い方
+
+1. 拡張機能をインストール
+2. YAML ファイルを開く
+3. `prod.`, `web.`, `database.` などを入力すると補完が表示
+4. Ctrl+Space で手動補完トリガー
+
+### 補完例
 ```yaml
 service_times:
-  web.*.response: 200    # Single-level wildcard
-  api.**.timeout: 30     # Multi-level recursive wildcard
+  prod.    # ← ここで補完候補が表示
+  
+resource_limits:
+  web.     # ← サービス名補完
+  
+environments:
+  production:
+    database.  # ← 設定タイプ補完
 ```
 
-**Configuration Templates:**
-- `sr-service-times`: Service timing configuration
-- `sr-resource-limits`: Resource limit configuration  
-- `sr-traffic-routing`: Traffic routing configuration
-- `sr-complete-config`: Full configuration template
+## 📋 コマンド
 
-## Installation
+- `StrataRegula: Restart Language Server` - LSPサーバー再起動
 
-### From VS Code Marketplace (Recommended)
-1. Open VS Code
-2. Go to Extensions (`Ctrl+Shift+X`)
-3. Search for "StrataRegula"
-4. Click Install
+## ⚙️ 設定
 
-### Manual Installation
-1. Download `.vsix` file from releases
-2. Open VS Code
-3. `Ctrl+Shift+P` → "Extensions: Install from VSIX"
-4. Select the downloaded file
+- `strataregulaLsp.maxSuggestions` (既定: 6) - 補完候補の最大数
+- `strataregulaLsp.telemetry` (既定: false) - 匿名テレメトリ
 
-## Prerequisites
+## 🔒 プライバシー
 
-**StrataRegula CLI** must be installed and available in PATH:
-```bash
-pip install strataregula
+- **完全ローカル処理**: すべての解析がユーザー環境内で完結
+- **外部通信なし**: ネットワーク接続は一切行いません
+- **データ保護**: 設定ファイルの内容が外部に送信されることはありません
 
-# Verify installation
-strataregula --version
-```
+## 📊 互換性
 
-## Usage
+- **VS Code**: 1.90+ 
+- **ファイル形式**: YAML (`.yaml`, `.yml`)
+- **動作環境**: Windows, macOS, Linux
 
-### 🚀 **Quick Start**
+## 🔧 トラブルシューティング
 
-1. **Create YAML file** with StrataRegula patterns:
-```yaml
-service_times:
-  web.*.response: 150
-  api.*.timeout: 30
-```
+### LSPが起動しない場合
+1. コマンドパレット → "StrataRegula: Restart Language Server"
+2. VS Codeを再起動
+3. Python環境の確認（LSPサーバーはPythonで動作）
 
-2. **Use IntelliSense**: Type `sr-` for snippet suggestions
+## 📚 開発者向け
 
-3. **Compile Configuration**: 
-   - Right-click file → "StrataRegula: Compile Configuration"
-   - Or use Command Palette (`Ctrl+Shift+P`) → "StrataRegula: Compile Configuration"
+このプロジェクトはUML駆動開発アプローチで設計されています：
+- [GitHub - strataregula-lsp](https://github.com/unizontech/strataregula-lsp)
+- [UML設計文書](https://github.com/unizontech/strataregula-lsp/tree/main/docs)
 
-### 📊 **Available Commands**
+## 📝 更新履歴
 
-| Command | Description | Shortcut |
-|---------|-------------|----------|
-| `StrataRegula: Compile Configuration` | Compile YAML to Python/JSON/YAML | Right-click menu |
-| `StrataRegula: Preview Compiled Output` | Show tree-formatted preview | Command Palette |
-| `StrataRegula: Check Environment` | Run environment diagnostics | Command Palette |
+### 0.1.0 - 2025-08-28
+- 初版リリース
+- YAML LSPサーバー統合
+- 階層的補完機能
+- 学習型提案エンジン
+- LSPサーバー再起動コマンド
 
-### 🎨 **Syntax Highlighting**
+## 📄 ライセンス
 
-**Special highlighting for:**
-- ✨ **Wildcard operators**: `*` and `**`
-- 🏷️ **Configuration keys**: `service_times`, `resource_limits`, `traffic_routing`
-- 🔢 **Pattern values**: Numeric values in configurations
-- 📝 **Service patterns**: `web.*.response` style patterns
-
-### 📝 **Code Snippets**
-
-Type these prefixes and press `Tab`:
-
-- **`sr-service-times`**: Service timing template
-- **`sr-resource-limits`**: Resource limits template
-- **`sr-traffic-routing`**: Traffic routing template  
-- **`sr-wildcard`**: Single wildcard pattern
-- **`sr-recursive-wildcard`**: Recursive wildcard pattern
-- **`sr-complete-config`**: Full configuration example
-
-## Configuration
-
-### Extension Settings
-
-Currently no custom settings required. The extension automatically detects StrataRegula patterns in YAML files.
-
-### StrataRegula CLI Configuration
-
-Make sure `strataregula` command is available:
-```bash
-# Check if StrataRegula is installed
-which strataregula  # On Unix
-where strataregula  # On Windows
-
-# Test compilation
-strataregula doctor
-```
-
-## Examples
-
-### Basic Service Configuration
-```yaml
-service_times:
-  web.frontend.response: 200
-  web.backend.response: 300
-  api.v1.timeout: 30
-  api.v2.timeout: 45
-```
-
-### Advanced Hierarchical Configuration  
-```yaml
-regions:
-  tokyo:
-    web.*.cpu: 80
-    api.*.memory: 512
-  osaka:
-    web.*.cpu: 60
-    api.*.memory: 256
-```
-
-## Troubleshooting
-
-### StrataRegula Command Not Found
-```bash
-# Install StrataRegula
-pip install strataregula
-
-# Add to PATH if needed
-export PATH=$PATH:/path/to/python/scripts
-```
-
-### Compilation Errors
-1. Check YAML syntax validity
-2. Run `strataregula doctor --fix-suggestions`
-3. Verify file contains StrataRegula patterns
-
-### Extension Not Activating
-- Ensure you're working with `.yaml` or `.yml` files
-- Check VS Code Developer Console for errors
-
-## Development
-
-### Building from Source
-```bash
-git clone https://github.com/strataregula/strataregula-vscode
-cd strataregula-vscode
-npm install
-npm run compile
-```
-
-### Testing
-- Press `F5` in VS Code to launch Extension Development Host
-- Open a YAML file with StrataRegula patterns
-- Test commands and IntelliSense
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
-## Related Projects
-
-- **[StrataRegula](https://github.com/strataregula/strataregula)** - Main YAML configuration compiler
-- **[StrataRegula LSP](https://github.com/strataregula/strataregula-lsp)** - Language Server Protocol implementation
-
-## License
-
-This extension is licensed under the [MIT License](LICENSE).
-
-## Support
-
-- **GitHub Issues**: [Report bugs and request features](https://github.com/strataregula/strataregula-vscode/issues)
-- **Documentation**: [StrataRegula Docs](https://github.com/strataregula/strataregula/docs)
-- **Community**: [GitHub Discussions](https://github.com/strataregula/strataregula/discussions)
-
----
-
-**StrataRegula VS Code Extension v0.1.0** - Enhanced YAML configuration pattern editing with intelligent IntelliSense.
+Apache-2.0

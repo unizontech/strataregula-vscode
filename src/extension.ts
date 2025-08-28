@@ -53,7 +53,19 @@ export function activate(context: vscode.ExtensionContext) {
         await runStrataRegulaDoctor();
     });
 
-    context.subscriptions.push(compileCommand, previewCommand, doctorCommand);
+    // Register LSP restart command
+    let restartCommand = vscode.commands.registerCommand('strataregulaLsp.restartServer', async () => {
+        if (client) {
+            vscode.window.showInformationMessage('Restarting StrataRegula Language Server...');
+            await client.stop();
+            startLanguageServer(context);
+        } else {
+            vscode.window.showInformationMessage('Starting StrataRegula Language Server...');
+            startLanguageServer(context);
+        }
+    });
+
+    context.subscriptions.push(compileCommand, previewCommand, doctorCommand, restartCommand);
 }
 
 function startLanguageServer(context: vscode.ExtensionContext) {

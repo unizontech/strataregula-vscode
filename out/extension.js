@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivate = exports.activate = void 0;
+exports.activate = activate;
+exports.deactivate = deactivate;
 const vscode = require("vscode");
 const path = require("path");
 const child_process_1 = require("child_process");
@@ -39,9 +40,20 @@ function activate(context) {
     let doctorCommand = vscode.commands.registerCommand('strataregula.doctor', async () => {
         await runStrataRegulaDoctor();
     });
-    context.subscriptions.push(compileCommand, previewCommand, doctorCommand);
+    // Register LSP restart command
+    let restartCommand = vscode.commands.registerCommand('strataregulaLsp.restartServer', async () => {
+        if (client) {
+            vscode.window.showInformationMessage('Restarting StrataRegula Language Server...');
+            await client.stop();
+            startLanguageServer(context);
+        }
+        else {
+            vscode.window.showInformationMessage('Starting StrataRegula Language Server...');
+            startLanguageServer(context);
+        }
+    });
+    context.subscriptions.push(compileCommand, previewCommand, doctorCommand, restartCommand);
 }
-exports.activate = activate;
 function startLanguageServer(context) {
     // Path to the LSP server launcher script
     const serverScript = path.join(context.extensionPath, 'server', 'lsp_server.py');
@@ -160,5 +172,4 @@ function deactivate() {
     }
     return undefined;
 }
-exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map
