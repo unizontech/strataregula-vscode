@@ -1,0 +1,42 @@
+name: cov-bump-js
+on:
+  schedule: 
+    - cron: "0 0 10 * *"  # Monthly on 10th at 09:00 JST (UTC 0:00)
+  workflow_dispatch:
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: 
+          node-version: "20"
+      - name: Install dependencies
+        run: npm ci
+      - name: Try bump +5pt if head passes
+        run: |
+          node tools/bump_nyc_threshold.mjs || true
+      - name: Create PR if changes made
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "ci(coverage): bump nyc lines +5pt if head coverage supports it"
+          title: "ci(coverage): monthly NYC threshold bump +5pt"
+          body: |
+            Auto-generated monthly coverage threshold increase for TypeScript code.
+            
+            This PR increases the NYC coverage lines threshold by 5 percentage points,
+            but only if current coverage already meets the new target.
+            
+            **Safety guarantee**: Existing tests will continue to pass.
+            
+            Changes:
+            - Updated coverage threshold in .nycrc.json
+            - Current coverage verified to support new threshold
+            
+            Monthly coverage improvement as part of quality enhancement initiative.
+            Aligns with Python repositories' coverage gate automation.
+          branch: "ci/cov-bump-js"
+          delete-branch: true

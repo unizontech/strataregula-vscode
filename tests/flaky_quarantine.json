@@ -1,0 +1,6 @@
+{
+  "_comment": "Flaky Test Quarantine List for TypeScript/Jest",
+  "_format": "testName: reason",
+  "_usage": "Tests listed here will be skipped in Jest runs",
+  "_managed_by": "flaky detection and rehab workflows"
+}

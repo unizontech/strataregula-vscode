@@ -1,0 +1,13 @@
+core:
+  - "src/**"
+tests:
+  - "tests/**"
+docs:
+  - "docs/**"
+devex:
+  - ".devcontainer/**"
+  - ".github/**"
+agents:
+  - "AGENTS.md"
+contributing:
+  - "CONTRIBUTING.md"

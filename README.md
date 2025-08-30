@@ -1,6 +1,13 @@
+> 👋 新しく参加した方はまず [docs/ONBOARDING.md](docs/ONBOARDING.md) をご覧ください。
+
 > **開発者へ**: 作業開始前に必ず [docs/README_FOR_DEVELOPERS.md](docs/README_FOR_DEVELOPERS.md) を確認してください。
 
 # StrataRegula LSP
+
+[![CI](https://img.shields.io/badge/CI-github--actions-blue)](#)
+[![RunLog Guard](https://img.shields.io/badge/RunLog-guard-green)](#)
+[![Docs LinkCheck](https://img.shields.io/badge/Docs-linkcheck-green)](#)
+[![PR Size Guard](https://img.shields.io/badge/PR--Size-guard-orange)](#)
 
 動的設定ファイルの学習型インテリセンス。YAMLを解析し、**頻度/階層ベース**で補完候補を提案します。
 
