@@ -1,3 +1,5 @@
+> **開発者へ**: 作業開始前に必ず [docs/README_FOR_DEVELOPERS.md](docs/README_FOR_DEVELOPERS.md) を確認してください。
+
 # StrataRegula LSP
 
 動的設定ファイルの学習型インテリセンス。YAMLを解析し、**頻度/階層ベース**で補完候補を提案します。
