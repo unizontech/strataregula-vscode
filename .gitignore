@@ -5,3 +5,8 @@ node_modules
 *.vsix
 .DS_Store
 *.log
+
+# Test coverage and build artifacts
+coverage/
+.nyc_output/
+*.lcov
