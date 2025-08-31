@@ -1,13 +1,5 @@
-core:
-  - "src/**"
-tests:
-  - "tests/**"
-docs:
-  - "docs/**"
-devex:
-  - ".devcontainer/**"
-  - ".github/**"
-agents:
-  - "AGENTS.md"
-contributing:
-  - "CONTRIBUTING.md"
+# v4 format - simple string patterns
+documentation: ['*.md', 'docs/**']
+frontend: ['src/components/**', '*.js', '*.jsx']
+backend: ['server/**', 'api/**']
+testing: ['**/*test*', '**/*spec*']
