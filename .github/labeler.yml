@@ -1,22 +1,22 @@
 core:
 - any:
   - changed-files:
-    - any-glob-to-any-file: ['src/**']
+    - any-glob-to-any-file: ['src']
 
 tests:
 - any:
   - changed-files:
-    - any-glob-to-any-file: ['tests/**']
+    - any-glob-to-any-file: ['tests']
 
 docs:
 - any:
   - changed-files:
-    - any-glob-to-any-file: ['docs/**']
+    - any-glob-to-any-file: ['docs']
 
 devex:
 - any:
   - changed-files:
-    - any-glob-to-any-file: ['.devcontainer/**', '.github/**']
+    - any-glob-to-any-file: ['.devcontainer', '.github']
 
 agents:
 - any:
