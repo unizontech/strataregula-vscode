@@ -1,23 +1,30 @@
 core:
-  - changed-files:
-      - any-glob-to-any-file: ['src/**']
+- changed-files:
+    any-glob-to-any-file:
+      - 'src/**'
 
 tests:
-  - changed-files:
-      - any-glob-to-any-file: ['tests/**']
+- changed-files:
+    any-glob-to-any-file:
+      - 'tests/**'
 
 docs:
-  - changed-files:
-      - any-glob-to-any-file: ['docs/**']
+- changed-files:
+    any-glob-to-any-file:
+      - 'docs/**'
 
 devex:
-  - changed-files:
-      - any-glob-to-any-file: ['.devcontainer/**', '.github/**']
+- changed-files:
+    any-glob-to-any-file:
+      - '.devcontainer/**'
+      - '.github/**'
 
 agents:
-  - changed-files:
-      - any-glob-to-any-file: ['AGENTS.md']
+- changed-files:
+    any-glob-to-any-file:
+      - 'AGENTS.md'
 
 contributing:
-  - changed-files:
-      - any-glob-to-any-file: ['CONTRIBUTING.md']
+- changed-files:
+    any-glob-to-any-file:
+      - 'CONTRIBUTING.md'
