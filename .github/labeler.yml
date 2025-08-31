@@ -1,23 +1,8 @@
-core:
-- changed-files:
-  - any-glob-to-any-file: 'src/**'
-
-tests:
-- changed-files:
-  - any-glob-to-any-file: 'tests/**'
-
-docs:
+# 最小構成でテスト
+Documentation:
 - changed-files:
   - any-glob-to-any-file: 'docs/**'
 
-devex:
+core:
 - changed-files:
-  - any-glob-to-any-file: ['.devcontainer/**', '.github/**']
-
-agents:
-- changed-files:
-  - any-glob-to-any-file: 'AGENTS.md'
-
-contributing:
-- changed-files:
-  - any-glob-to-any-file: 'CONTRIBUTING.md'
+  - any-glob-to-any-file: 'src/**'
