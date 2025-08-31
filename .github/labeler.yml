@@ -1,3 +1,15 @@
-touched-a-pdf-file:
+documentation:
   - changed-files:
-      - any-glob-to-any-file: ['*.pdf']
+      - any-glob-to-any-file: ['*.md', 'docs/**']
+
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: ['src/components/**', '*.js', '*.jsx']
+
+backend:
+  - changed-files:
+      - any-glob-to-any-file: ['server/**', 'api/**']
+
+testing:
+  - changed-files:
+      - any-glob-to-any-file: ['**/*test*', '**/*spec*']
