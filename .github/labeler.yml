@@ -1,15 +1,5 @@
-documentation:
-  - changed-files:
-      - any-glob-to-any-file: ['*.md', 'docs/**']
-
-frontend:
-  - changed-files:
-      - any-glob-to-any-file: ['src/components/**', '*.js', '*.jsx']
-
-backend:
-  - changed-files:
-      - any-glob-to-any-file: ['server/**', 'api/**']
-
-testing:
-  - changed-files:
-      - any-glob-to-any-file: ['**/*test*', '**/*spec*']
+# v4 format - simple string patterns
+documentation: ['*.md', 'docs/**']
+frontend: ['src/components/**', '*.js', '*.jsx']
+backend: ['server/**', 'api/**']
+testing: ['**/*test*', '**/*spec*']
