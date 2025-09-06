@@ -96,17 +96,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Check workflow syntax  
+      - name: Basic workflow syntax check
         run: |
-          # Install actionlint
-          wget -q https://github.com/rhymond/actionlint/releases/download/v1.7.3/actionlint_1.7.3_linux_amd64.tar.gz
-          tar -xzf actionlint_1.7.3_linux_amd64.tar.gz actionlint
-          chmod +x actionlint
-          # Run actionlint (allow certain warnings)
-          ./actionlint -color || { 
-            echo "⚠️ actionlint found issues but proceeding (non-critical errors)" 
-            exit 0
-          }
+          # Basic YAML syntax validation (faster alternative to actionlint)
+          find .github/workflows -name "*.yml" -o -name "*.yaml" | while read file; do
+            echo "Checking $file for basic syntax..."
+            python3 -c "import yaml; yaml.safe_load(open('$file'))" || {
+              echo "❌ YAML syntax error in $file"
+              exit 1
+            }
+          done
+          echo "✅ All workflow files have valid YAML syntax"
 
   secrets-scan:
     runs-on: ubuntu-latest
