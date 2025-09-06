@@ -6,6 +6,9 @@ on:
     tags:
       - "v*.*.*"
 
+permissions:
+  contents: write    # GitHub Release作成に必須
+
 jobs:
   preflight:
     runs-on: ubuntu-latest
