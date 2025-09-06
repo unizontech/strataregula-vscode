@@ -1,13 +1,37 @@
 name: Publish VS Code Extension
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - "v*.*.*"
 
 jobs:
-  publish:
+  preflight:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check version consistency (tag vs package.json)
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          PKG="$(jq -r .version package.json)"
+          echo "TAG=${TAG}  PKG=v${PKG}"
+          [[ "${TAG#v}" == "${PKG}" ]] || { echo "❌ Version mismatch: tag ${TAG} vs package.json ${PKG}"; exit 1; }
+          echo "✅ Version check passed: ${TAG} matches package.json"
+      
+      - name: Check CHANGELOG has version entry
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          grep -E "^##? +\[?${VERSION}\]?" CHANGELOG.md \
+            || { echo "❌ CHANGELOG.md missing section for ${VERSION}"; exit 1; }
+          echo "✅ CHANGELOG check passed: Found entry for ${VERSION}"
+
+  publish:
+    needs: preflight
+    runs-on: ubuntu-latest
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_TOKEN }}
     
     steps:
       - name: Checkout
@@ -44,7 +68,7 @@ jobs:
         run: vsce package
         
       - name: Publish to VS Code Marketplace
-        run: vsce publish --pat ${{ secrets.VSCE_TOKEN }}
+        run: npm run publish
         
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
