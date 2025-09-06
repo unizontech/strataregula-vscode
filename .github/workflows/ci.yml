@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ main, master ]  # Backstop for main branch
+
+permissions:
+  contents: read  # Read-only for security
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better merge testing
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build TypeScript
+        run: npm run build
+      
+      - name: Run tests
+        run: npm test --if-present
+      
+      - name: Run linter
+        run: npm run lint --if-present
+  
+  policy-checks:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Check no .vsix files committed
+        run: |
+          if git ls-files '*.vsix' | grep -q .; then
+            echo "❌ ERROR: .vsix files must not be committed to the repository"
+            echo "Found files:"
+            git ls-files '*.vsix'
+            exit 1
+          fi
+          echo "✅ No .vsix files in repository"
+      
+      - name: Check no node_modules committed
+        run: |
+          if git ls-files 'node_modules/*' | grep -q .; then
+            echo "❌ ERROR: node_modules must not be committed"
+            exit 1
+          fi
+          echo "✅ No node_modules in repository"
+      
+      - name: Verify tsconfig excludes
+        run: |
+          if ! grep -q "jest.setup.ts" tsconfig.json; then
+            echo "⚠️ WARNING: tsconfig.json should exclude jest.setup.ts"
+          fi
+          echo "✅ tsconfig.json configuration checked"

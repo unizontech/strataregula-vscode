@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__serena__list_memories",
+      "mcp__serena__activate_project",
+      "mcp__serena__read_memory",
+      "mcp__serena__search_for_pattern",
+      "Bash(echo $HOME)",
+      "Read(//c/Users/uraka/**)",
+      "Bash(powershell:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

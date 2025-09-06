@@ -1,0 +1,128 @@
+name: Workflow Guard
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.44.3/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      # 1) ci.yml の必須要素が消えていないか
+      - name: Assert ci.yml invariants
+        run: |
+          f=".github/workflows/ci.yml"
+          test -f "$f" || { echo "❌ ci.yml missing"; exit 1; }
+
+          # 必須トリガ
+          yq '.on.pull_request' "$f" >/dev/null || { echo "❌ pull_request trigger missing"; exit 1; }
+          yq '.on.push.branches[] | select(. == "main" or . == "master")' "$f" >/dev/null || { echo "❌ push->main/master backstop missing"; exit 1; }
+
+          # 必須ジョブ
+          yq '.jobs.test // .jobs["build-and-test"]' "$f" >/dev/null || { echo "❌ test job missing"; exit 1; }
+          yq '.jobs.policy' "$f" >/dev/null || { echo "❌ policy job missing"; exit 1; }
+
+          # 必須ステップ（簡易パターン）
+          grep -E "git ls-files.*\.vsix" -q "$f" || { echo "❌ .vsix forbid step missing"; exit 1; }
+
+          echo "✅ ci.yml invariants preserved"
+
+      # 2) release.yml の必須要素が消えていないか
+      - name: Assert release.yml invariants
+        run: |
+          f=".github/workflows/release.yml"
+          test -f "$f" || { echo "❌ release.yml missing"; exit 1; }
+
+          # タグ起動 & contents:write
+          yq '.on.push.tags[] | select(test("^v"))' "$f" >/dev/null || { echo "❌ tag trigger (v*) missing"; exit 1; }
+          yq '.permissions.contents == "write"' "$f" >/dev/null || { echo "❌ permissions.contents write missing"; exit 1; }
+
+          # preflight job
+          yq '.jobs.preflight' "$f" >/dev/null || { echo "❌ preflight job missing"; exit 1; }
+          
+          # publish job
+          yq '.jobs.publish' "$f" >/dev/null || { echo "❌ publish job missing"; exit 1; }
+
+          # VSCE/Release 実行の存在
+          grep -E "\bvsce\b|npm run publish" -q "$f" || { echo "❌ Marketplace publish step missing"; exit 1; }
+          grep -E "softprops/action-gh-release@v" -q "$f" || { echo "❌ GitHub Release step missing"; exit 1; }
+
+          # VSCE_PAT をどこかで渡しているか
+          grep -E "VSCE_PAT|VSCE_TOKEN" -q "$f" || { echo "❌ VSCE_PAT/TOKEN wiring missing"; exit 1; }
+
+          echo "✅ release.yml invariants preserved"
+
+      # 3) package.json の publish script
+      - name: Assert package.json publish script
+        run: |
+          f="package.json"
+          test -f "$f" || { echo "❌ package.json missing"; exit 1; }
+
+          # publish script exists
+          yq '.scripts.publish' "$f" >/dev/null || { echo "❌ npm run publish script missing"; exit 1; }
+          
+          # publish script contains vsce
+          grep -E '"publish".*vsce' -q "$f" || { echo "❌ publish script must contain vsce"; exit 1; }
+
+          echo "✅ package.json publish script preserved"
+
+      # 4) 破壊的変更の明示承認チェック
+      - name: Check for breaking change acknowledgment
+        if: failure()  # Only run if previous checks failed
+        run: |
+          if echo '${{ toJson(github.event.pull_request.labels.*.name) }}' | grep -q "ci-breaking-ack"; then
+            echo "⚠️  ci-breaking-ack label detected: Breaking changes acknowledged"
+            echo "This PR contains intentional CI/CD breaking changes"
+            exit 0  # Allow override
+          else
+            echo "❌ Critical CI/CD components are missing"
+            echo "To override this check, add the 'ci-breaking-ack' label to this PR"
+            echo "This should only be done with careful review and understanding of the impact"
+            exit 1
+          fi
+
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Basic workflow syntax check
+        run: |
+          # Basic YAML syntax validation (faster alternative to actionlint)
+          find .github/workflows -name "*.yml" -o -name "*.yaml" | while read file; do
+            echo "Checking $file for basic syntax..."
+            python3 -c "import yaml; yaml.safe_load(open('$file'))" || {
+              echo "❌ YAML syntax error in $file"
+              exit 1
+            }
+          done
+          echo "✅ All workflow files have valid YAML syntax"
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Basic secrets detection
+        run: |
+          # Check for obvious secret patterns in diff
+          changed_files=$(git diff HEAD~1 HEAD --name-only 2>/dev/null || echo "")
+          if [ -n "$changed_files" ]; then
+            if echo "$changed_files" | xargs -I {} test -f {} && echo "$changed_files" | xargs grep -l -E "(ghp_|gho_|VSCE_PAT.*[A-Za-z0-9]{20,}|password.*=.*['\"][^'\"]+)" 2>/dev/null; then
+              echo "❌ Potential secrets detected in changes"
+              exit 1
+            fi
+          fi
+          echo "✅ No obvious secrets detected"

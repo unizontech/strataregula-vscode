@@ -9,5 +9,12 @@
 		"sourceMap": true,
 		"rootDir": "src",
 		"strict": true
-	}
+	},
+	"exclude": [
+		"node_modules",
+		".vscode-test",
+		"jest.setup.ts",
+		"**/*.test.ts",
+		"**/*.spec.ts"
+	]
 }

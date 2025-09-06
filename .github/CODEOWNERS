@@ -6,3 +6,13 @@
 /.github/                  @strataregula/devex-team
 /AGENTS.md                 @strataregula/devex-team
 /CONTRIBUTING.md           @strataregula/devex-team
+
+# Critical CI/CD files require extra protection (workflow-guard.yml enforces)
+.github/workflows/**       @strataregula/devex-team
+package.json               @strataregula/core-team
+CHANGELOG.md              @strataregula/devex-team
+.vscodeignore             @strataregula/core-team
+
+# Security-related files
+security-patch-registry/** @strataregula/security-team
+secret-audit.*            @strataregula/security-team
