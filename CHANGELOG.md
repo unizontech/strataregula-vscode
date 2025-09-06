@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2025-09-06
+
+### Fixed
+- TypeScript compilation error with jest.setup.ts
+- Release workflow with preflight checks and proper PAT handling
+
+### Enhanced
+- Added version consistency check in CI
+- Added CHANGELOG validation in release workflow
+- Improved release automation with npm run publish
+
 ## [0.2.0] - 2025-09-06
 
 ### Added

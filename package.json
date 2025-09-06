@@ -3,7 +3,7 @@
   "displayName": "StrataRegula",
   "publisher": "Unizontechcoltd",
   "description": "動的設定ファイルの学習型インテリセンス（YAML補完）",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.90.0"
