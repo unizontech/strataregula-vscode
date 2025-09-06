@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-09-06
+
+### Added
+- StrataRegula Python パッケージ v0.3.0 との完全統合
+- 新コマンド: Show Kernel Statistics (v0.3.0) - カーネル統計情報の表示
+- Web View による統計情報表示機能の強化
+
+### Enhanced
+- StrataRegula v0.3.0 の新機能への対応
+- パフォーマンスと安定性の向上
+- 拡張機能のバージョン体系を StrataRegula コアと連携
+
+### Dependencies
+- StrataRegula Python パッケージ v0.3.0 以降が必要
+
 ## [0.1.4] - 2025-08-28
 
 ### Added
